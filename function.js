@@ -168,7 +168,7 @@ window.function = function (html, fileName, format, zoom, orientation, margin, b
 		setTimeout(function() { 
 		  button.innerText = 'Download';
 		  button.className = ''; 
-		}, 2000);
+		}, 10000);
 		}).save();
 	  });
 	  </script>
