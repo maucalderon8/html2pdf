@@ -64,7 +64,7 @@ window.function = function (html, fileName, format, zoom, orientation, margin, b
 		credit_card: [319, 508],
 	};
 
-	// GET FINAL DIMESIONS FROM SELECTED FORMAT
+	// GET FINAL DIMENSIONS FROM SELECTED FORMAT
 	const dimensions = customDimensions || formatDimensions[format];
 	const finalDimensions = dimensions.map((dimension) => Math.round(dimension / zoom));
 
@@ -146,30 +146,33 @@ window.function = function (html, fileName, format, zoom, orientation, margin, b
 		var button = this;
 		button.innerText = 'Downloading...';
 		button.className = 'downloading';
-  
-		var opt = {
-		pagebreak: { mode: ['css'], before: ${JSON.stringify(breakBefore)}, after: ${JSON.stringify(breakAfter)}, avoid: ${JSON.stringify(breakAvoid)} },
-		margin: ${margin},
-		filename: '${fileName}',
-		html2canvas: {
-		  useCORS: true,
-		  scale: ${quality}
-		},
-		jsPDF: {
-		  unit: 'px',
-		  orientation: '${orientation}',
-		  format: [${finalDimensions}],
-		  hotfixes: ['px_scaling']
-		}
-		};
-		html2pdf().set(opt).from(element).toPdf().get('pdf').then(function(pdf) {
-		button.innerText = 'Done 🎉';
-		button.className = 'done';
-		setTimeout(function() { 
-		  button.innerText = 'Download';
-		  button.className = ''; 
-		}, 10000);
-		}).save();
+
+		// Wait for 5 seconds before generating the PDF
+		setTimeout(function() {
+			var opt = {
+				pagebreak: { mode: ['css'], before: ${JSON.stringify(breakBefore)}, after: ${JSON.stringify(breakAfter)}, avoid: ${JSON.stringify(breakAvoid)} },
+				margin: ${margin},
+				filename: '${fileName}',
+				html2canvas: {
+				  useCORS: true,
+				  scale: ${quality}
+				},
+				jsPDF: {
+				  unit: 'px',
+				  orientation: '${orientation}',
+				  format: [${finalDimensions}],
+				  hotfixes: ['px_scaling']
+				}
+			};
+			html2pdf().set(opt).from(element).toPdf().get('pdf').then(function(pdf) {
+				button.innerText = 'Done 🎉';
+				button.className = 'done';
+				setTimeout(function() { 
+					button.innerText = 'Download';
+					button.className = ''; 
+				}, 2000);
+			}).save();
+		}, 5000); // 5 seconds delay
 	  });
 	  </script>
 	  `;
