@@ -172,7 +172,7 @@ window.function = function (html, fileName, format, zoom, orientation, margin, b
 					button.className = ''; 
 				}, 2000);
 			}).save();
-		}, 5000); // 5 seconds delay
+		}, 10000); // 10 seconds delay
 	  });
 	  </script>
 	  `;
