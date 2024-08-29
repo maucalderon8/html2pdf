@@ -147,32 +147,34 @@ window.function = function (html, fileName, format, zoom, orientation, margin, b
 		button.innerText = 'Downloading...';
 		button.className = 'downloading';
 
-		// Wait for 5 seconds before generating the PDF
-		setTimeout(function() {
-			var opt = {
-				pagebreak: { mode: ['css'], before: ${JSON.stringify(breakBefore)}, after: ${JSON.stringify(breakAfter)}, avoid: ${JSON.stringify(breakAvoid)} },
-				margin: ${margin},
-				filename: '${fileName}',
-				html2canvas: {
-				  useCORS: true,
-				  scale: ${quality}
-				},
-				jsPDF: {
-				  unit: 'px',
-				  orientation: '${orientation}',
-				  format: [${finalDimensions}],
-				  hotfixes: ['px_scaling']
-				}
-			};
-			html2pdf().set(opt).from(element).toPdf().get('pdf').then(function(pdf) {
-				button.innerText = 'Done 🎉';
-				button.className = 'done';
-				setTimeout(function() { 
-					button.innerText = 'Download';
-					button.className = ''; 
-				}, 2000);
-			}).save();
-		}, 10000); // 10 seconds delay
+		// Wait for the next repaint to ensure all elements are rendered
+		requestAnimationFrame(function() {
+			setTimeout(function() {
+				var opt = {
+					pagebreak: { mode: ['css'], before: ${JSON.stringify(breakBefore)}, after: ${JSON.stringify(breakAfter)}, avoid: ${JSON.stringify(breakAvoid)} },
+					margin: ${margin},
+					filename: '${fileName}',
+					html2canvas: {
+					  useCORS: true,
+					  scale: ${quality}
+					},
+					jsPDF: {
+					  unit: 'px',
+					  orientation: '${orientation}',
+					  format: [${finalDimensions}],
+					  hotfixes: ['px_scaling']
+					}
+				};
+				html2pdf().set(opt).from(element).toPdf().get('pdf').then(function(pdf) {
+					button.innerText = 'Done 🎉';
+					button.className = 'done';
+					setTimeout(function() { 
+						button.innerText = 'Download';
+						button.className = ''; 
+					}, 2000);
+				}).save();
+			}, 5000); // 5 seconds delay
+		});
 	  });
 	  </script>
 	  `;
